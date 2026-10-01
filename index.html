@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>蜂巢 BEEHIVE · 好友邀请办理后付套餐</title>
+<style>
+/* ============================================================
+   蜂巢 H5 · 设计系统（kernel 与 App 同源；排版语言参照 SK Telecom 官方商城 H5）
+   Token: 八级灰阶 g50–g900 / 圆角 6·10·12·14 / 分区 32px / 卡片 1px 描边无重投影
+   ============================================================ */
+:root{
+  --g900:#111111; --g800:#262626; --g700:#3d3d3d; --g600:#555555;
+  --g500:#767676; --g400:#999999; --g300:#b8b8b8; --g200:#d6d6d6;
+  --g150:#e2e2e2; --g100:#ededed; --g50:#f6f6f6;
+  --line:#e5e5e5; --white:#ffffff; --warn:#c0392b;
+  --r-sm:6px; --r-md:10px; --r-lg:12px; --r-xl:14px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  background:var(--g100);color:var(--g900);min-height:100vh;display:flex;justify-content:center;
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea{font-family:inherit;font-size:14px;color:var(--g900)}
+.wrap{width:100%;max-width:430px;min-height:100vh;background:var(--white);position:relative;overflow-x:hidden}
+
+/* ---------- 顶部品牌条（浏览器环境无状态栏，需自带头） ---------- */
+.topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.97);backdrop-filter:saturate(1.6) blur(8px);
+  border-bottom:1px solid var(--line);height:54px;display:flex;align-items:center;gap:10px;padding:0 14px}
+.tb-back{width:36px;height:36px;margin-left:-8px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--g900);flex:none}
+.tb-back i{width:20px;height:20px}
+.tb-back[hidden]{display:none}
+.brand{display:flex;align-items:center;gap:9px;min-width:0}
+.brand-logo{width:31px;height:31px;object-fit:contain;flex:none;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.brand-name{font-size:14px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
+.brand-sub{font-size:8px;color:var(--g400);letter-spacing:.7px;line-height:1;margin-top:3px}
+.tb-dl{margin-left:auto;height:32px;padding:0 13px;border-radius:999px;background:var(--g900);color:var(--white);
+  font-size:12px;font-weight:700;flex:none}
+
+/* ---------- 页面容器 ---------- */
+main{padding-bottom:96px}
+.page{display:none;padding:16px 16px 8px}
+.page.on{display:block}
+
+/* ---------- 排版语言（参照 H5）：eyebrow → H3 → 内容 ---------- */
+.ref-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  font-size:12px;font-weight:600;color:var(--g500);letter-spacing:.2px;margin:0 0 8px}
+.ref-eyebrow .stp{font-variant-numeric:tabular-nums}
+.ref-h3{font-size:17px;font-weight:800;color:var(--g900);letter-spacing:-.2px;margin:0 0 12px}
+.ref-h2{font-size:21px;font-weight:800;color:var(--g900);letter-spacing:-.3px;margin:0 0 6px}
+.step-prog{display:flex;gap:4px;margin:2px 0 8px}
+.step-prog i{flex:1;height:3px;border-radius:2px;background:var(--g150)}
+.step-prog i.on{background:var(--g900)}
+.ref-sec{margin-top:32px}
+.ref-sec:first-child{margin-top:12px}
+.t-sub{font-size:12px;color:var(--g500);line-height:1.65}
+.t-num{font-variant-numeric:tabular-nums}
+.row{display:flex;align-items:center}
+.row-between{display:flex;align-items:center;justify-content:space-between}
+.grow{flex:1;min-width:0}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}
+
+/* ---------- 卡片 / 信息行 / 计算卡 ---------- */
+.ref-card{background:var(--white);border:1px solid var(--g150);border-radius:var(--r-lg);padding:4px 14px}
+.ref-card.pad{padding:14px}
+.ref-kv{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--g100)}
+.ref-kv:last-child{border-bottom:none}
+.ref-kv .k{font-size:12px;color:var(--g500);flex:none}
+.ref-kv .v{font-size:14px;font-weight:700;color:var(--g900);text-align:right}
+.ref-kv .v.sm{font-size:13px;font-weight:600}
+.ref-calc{background:var(--g50);border-radius:var(--r-lg);padding:14px 16px;margin-top:12px}
+.ref-calc .cr{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 0;font-size:13px;color:var(--g600)}
+.ref-calc .cr b{font-weight:700;color:var(--g900)}
+.ref-calc .fin{margin-top:10px;padding-top:12px;border-top:1px dashed var(--g200);
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.ref-calc .fin .lb{font-size:13px;font-weight:700}
+.ref-calc .fin .v{font-size:26px;font-weight:800;letter-spacing:-.5px}
+
+/* ---------- 步骤引导 / 折叠公告 / 上-下一个 ---------- */
+.ref-step{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--g100)}
+.ref-step:last-child{border-bottom:none}
+.ref-step .no{flex:none;width:24px;height:24px;border-radius:50%;background:var(--g900);color:var(--white);
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.ref-step .tx b{display:block;font-size:13px;font-weight:700}
+.ref-step .tx span{display:block;font-size:12px;color:var(--g500);margin-top:3px;line-height:1.6}
+.ref-notice{margin-top:12px;background:var(--g50);border-radius:var(--r-lg);padding:12px 14px}
+.ref-notice .nt{font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ref-notice .ni{border-top:1px solid var(--g150);padding:11px 0;cursor:pointer}
+.ref-notice .ni:first-of-type{border-top:none}
+.ref-notice .nq{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;font-weight:600;color:var(--g700)}
+.ref-notice .nq i{width:14px;height:14px;color:var(--g400);transition:transform .2s}
+.ref-notice .ni.open .nq i{transform:rotate(90deg)}
+.ref-notice .na{max-height:0;overflow:hidden;transition:max-height .25s ease;font-size:12px;color:var(--g600);line-height:1.7}
+.ref-notice .ni.open .na{max-height:260px;padding-top:8px}
+.ref-prevnext{display:flex;gap:10px;margin-top:12px}
+.ref-prevnext button{flex:1;height:46px;border:1px solid var(--g200);border-radius:var(--r-md);background:var(--white);
+  font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:4px;color:var(--g800)}
+.ref-prevnext button i{width:16px;height:16px}
+.ref-prevnext button:active{background:var(--g50)}
+.ref-chip{height:32px;padding:0 14px;border-radius:999px;border:1px solid var(--g150);background:var(--white);
+  font-size:12px;color:var(--g600);display:inline-flex;align-items:center;white-space:nowrap}
+.ref-chip.on{background:var(--g900);border-color:var(--g900);color:var(--white);font-weight:700}
+
+/* ---------- 徽标 ---------- */
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;border:1px solid var(--g200);
+  font-size:10px;color:var(--g600);background:var(--white);font-weight:600}
+.tag-solid{background:var(--g900);color:var(--white);border-color:var(--g900)}
+.tag-warn{background:#fdf1ef;color:var(--warn);border-color:#f3d5d0}
+
+/* ---------- 选择套餐：与 App 同构的滑块（pm-* 同名组件） ---------- */
+.seg.mt12{margin-top:12px}
+.pm-amt{text-align:center;padding:16px 0 2px}
+.pm-num{font-size:40px;font-weight:800;letter-spacing:-1.4px;font-variant-numeric:tabular-nums}
+.pm-unit{font-size:15px;font-weight:700;color:var(--g600);margin-left:7px}
+.pm-slider{padding:4px 0 0}
+.pm-bubrow{position:relative;height:32px;margin:0 15px}
+.pm-bub{position:absolute;bottom:0;left:0;transform:translateX(-50%);background:var(--g900);color:var(--white);
+  font-size:13px;font-weight:700;padding:5px 12px;border-radius:14px;white-space:nowrap;pointer-events:none;z-index:3}
+.pm-bub::after{content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--g900);border-bottom:none}
+.pm-range{position:relative;height:34px}
+.pm-range input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:34px;background:transparent;
+  margin:0;outline:none;cursor:pointer;touch-action:none}
+.pm-range input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:3px;
+  background:linear-gradient(90deg,#111 0%,#111 var(--pct,50%),#e2e2e2 var(--pct,50%),#e2e2e2 100%)}
+.pm-range input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:30px;height:30px;
+  border-radius:50%;background:#111;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.34);margin-top:-13px}
+.pm-range input[type=range]::-moz-range-track{height:5px;border-radius:3px;background:#e2e2e2}
+.pm-range input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#111;border:3px solid #fff}
+.pm-tick{position:absolute;top:17px;width:12px;height:12px;border-radius:50%;background:var(--g200);
+  transform:translate(-50%,-50%);pointer-events:none}
+.pm-tick.on{background:var(--g900);width:16px;height:16px}
+.pm-scales{display:flex;justify-content:space-between;padding:14px 4px 0}
+.pm-scales span{font-size:13px;color:var(--g500);font-weight:600}
+.pm-scales span.on{color:var(--g900);font-size:14px;font-weight:800}
+.pk-side{font-size:10px;font-weight:700;color:var(--g500);margin-left:6px}
+.pk-side.on{color:var(--g900)}
+
+/* ---------- 套餐详情抽屉（底部拉出 · 左右结构 · 快速查看不跳全屏） ---------- */
+.pd-mask{position:fixed;inset:0;background:rgba(17,17,17,.42);z-index:60;opacity:0;pointer-events:none;transition:opacity .22s ease}
+.pd-mask.show{opacity:1;pointer-events:auto}
+.pd-sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;width:100%;max-width:430px;margin:0 auto;background:var(--white);
+  border-radius:16px 16px 0 0;transform:translateY(104%);transition:transform .26s cubic-bezier(.22,.61,.36,1);
+  max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -10px 30px rgba(0,0,0,.18)}
+.pd-sheet.show{transform:translateY(0)}
+.pd-grab{width:40px;height:4px;border-radius:2px;background:var(--g200);margin:8px auto 2px;flex:none}
+.pd-hd{display:flex;align-items:center;gap:8px;padding:4px 14px 10px;border-bottom:1px solid var(--g100);flex:none}
+.pd-back{width:32px;height:32px;margin-left:-6px;display:flex;align-items:center;justify-content:center;color:var(--g900);flex:none}
+.pd-back i{width:18px;height:18px}
+.pd-title{font-size:15px;font-weight:800}
+.pd-nav{margin-left:auto;display:flex;gap:6px}
+.pd-nav button{width:32px;height:32px;border:1px solid var(--g150);border-radius:50%;background:var(--white);
+  display:flex;align-items:center;justify-content:center;color:var(--g700)}
+.pd-nav button:active{background:var(--g50)}
+.pd-nav button i{width:15px;height:15px}
+.pd-body{flex:1;min-height:0;overflow-y:auto;padding:14px 16px 4px}
+.pd-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--g100)}
+.pd-hero-l{min-width:0}
+.pd-hero-r{text-align:right;flex:none}
+.pd-hero-r b{font-size:24px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.pd-hero-r span{font-size:12px;color:var(--g500);margin-left:1px}
+.pd-hero-r s{display:block;font-size:11px;color:var(--g400);margin-top:2px;text-decoration:line-through}
+.pd-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--g100);border:1px solid var(--g100);
+  border-radius:var(--r-lg);overflow:hidden;margin-top:12px}
+.pd-cell{background:var(--white);padding:11px 12px;min-width:0}
+.pd-cell .k{display:block;font-size:11px;color:var(--g500)}
+.pd-cell .v{display:block;font-size:13px;font-weight:700;margin-top:3px;color:var(--g900)}
+.pd-sec{margin-top:16px}
+.pd-sec-t{font-size:13px;font-weight:800;margin-bottom:8px}
+.pd-foot{flex:none;padding:10px 16px calc(10px + var(--safe-b));border-top:1px solid var(--g100);background:var(--white)}
+body.pd-open{overflow:hidden}
+
+/* ---------- 套餐卡（与 App 套餐卡同构） ---------- */
+.plan{background:var(--white);border:1px solid var(--g150);border-radius:var(--r-lg);padding:14px;cursor:pointer}
+.plan:active{border-color:var(--g400)}
+.plan-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.plan-name{font-size:15px;font-weight:800;letter-spacing:-.2px}
+.plan-sub{font-size:11px;color:var(--g500);margin-top:3px}
+.plan-price{text-align:right;flex:none}
+.plan-price b{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.plan-price span{display:block;font-size:10px;color:var(--g400);margin-top:1px}
+.plan-orig{font-size:11px;color:var(--g400);text-decoration:line-through;margin-top:2px}
+.plan-ft{margin-top:10px;padding-top:10px;border-top:1px dashed var(--g200);display:flex;align-items:center;
+  justify-content:space-between;gap:8px}
+.plan-ft .kv{font-size:12px;color:var(--g600);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plan-ft .go{font-size:11px;font-weight:700;color:var(--g900);flex:none;display:flex;align-items:center;gap:2px}
+.plan-ft .go i{width:13px;height:13px}
+.plan.disabled{opacity:.6;cursor:default}
+.plan.disabled:active{border-color:var(--g150)}
+
+/* ---------- 邀请人卡 ---------- */
+.inv{display:flex;align-items:center;gap:10px}
+.inv-ava{width:44px;height:44px;border-radius:50%;background:var(--g900);color:var(--white);flex:none;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
+.code-chip{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 6px 0 12px;border:1px dashed var(--g300);
+  border-radius:999px;background:var(--g50)}
+.code-chip b{font-size:14px;font-weight:800;letter-spacing:1.2px}
+.btn-copy{height:22px;padding:0 9px;border-radius:999px;background:var(--g900);color:var(--white);font-size:11px;font-weight:700}
+
+/* ---------- 权益列表 ---------- */
+.bnf{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--g600);line-height:1.7;padding:9px 0;
+  border-bottom:1px solid var(--g100)}
+.bnf:last-child{border-bottom:none}
+.bnf i{width:15px;height:15px;flex:none;color:var(--g900);margin-top:3px}
+.bnf b{color:var(--g900);font-weight:700}
+
+/* ---------- 表单（field 与 App 同构） ---------- */
+.field{padding:12px 0;border-bottom:1px solid var(--g150)}
+.field:last-child{border-bottom:none}
+.f-label{display:block;font-size:12px;font-weight:600;color:var(--g600);margin-bottom:6px}
+.f-label em{color:var(--warn);font-style:normal;margin-left:2px}
+.input{height:44px;border:1px solid var(--g200);border-radius:var(--r-sm);display:flex;align-items:center;gap:8px;
+  padding:0 12px;background:var(--white)}
+.input:focus-within{border-color:var(--g900)}
+.input i{width:16px;height:16px;color:var(--g400);flex:none}
+.input input{flex:1;min-width:0;border:none;outline:none;background:none;height:100%}
+.input-code{display:flex;gap:8px}
+.input-code .input{flex:1;min-width:0}
+.code-btn{height:44px;padding:0 12px;border:1px solid var(--g200);border-radius:var(--r-sm);font-size:12px;
+  font-weight:700;color:var(--g900);background:var(--g50);flex:none}
+.seg{display:flex;border:1px solid var(--g200);border-radius:var(--r-sm);overflow:hidden}
+.seg button{flex:1;height:42px;font-size:13px;font-weight:600;color:var(--g500);background:var(--white)}
+.seg button.on{background:var(--g900);color:var(--white);font-weight:700}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{flex:1;min-width:calc(50% - 6px);min-height:64px;border:1px solid var(--g200);border-radius:var(--r-md);
+  background:var(--white);padding:11px 12px;text-align:left;overflow:hidden}
+.opt.on{border-color:var(--g900);box-shadow:inset 0 0 0 1px var(--g900)}
+.opt.disabled{opacity:.5}
+.opt b{display:block;font-size:13px;font-weight:700;line-height:1.35;word-break:break-word}
+.opt span{display:block;font-size:11px;color:var(--g500);margin-top:4px;line-height:1.5;word-break:break-word}
+.cbx{width:20px;height:20px;border-radius:var(--r-sm);border:1.5px solid var(--g300);flex:none;display:flex;
+  align-items:center;justify-content:center;color:transparent;font-size:12px;font-weight:800}
+.cbx.on{background:var(--g900);border-color:var(--g900);color:var(--white)}
+.tail{display:flex;gap:8px;align-items:center}
+.tail input{width:60px;height:44px;text-align:center;border:1px solid var(--g200);border-radius:var(--r-sm);
+  font-size:16px;font-weight:700;letter-spacing:1px;outline:none}
+.tail input:focus{border-color:var(--g900)}
+
+/* ---------- 上传位 ---------- */
+.up{display:flex;align-items:center;gap:12px;border:1.5px dashed var(--g300);border-radius:var(--r-md);padding:14px;
+  background:var(--g50);cursor:pointer}
+.up i{width:22px;height:22px;color:var(--g400);flex:none}
+.up b{display:block;font-size:12.5px;font-weight:700}
+.up span{display:block;font-size:11px;color:var(--g500);margin-top:2px}
+.up.done{border-style:solid;border-color:var(--g900);background:var(--white)}
+.up.done i{color:var(--g900)}
+input[type=file]{display:none}
+
+/* ---------- 签名 ---------- */
+.sign-wrap{border:1px solid var(--g200);border-radius:var(--r-md);background:var(--g50);position:relative;overflow:hidden}
+#sign-canvas{display:block;width:100%;height:160px;touch-action:none}
+.sign-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--g400);
+  font-size:12px;pointer-events:none}
+.sign-bar{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+
+/* ---------- 按钮 ---------- */
+.btn{height:50px;border-radius:var(--r-md);font-size:15px;font-weight:700;width:100%;display:flex;
+  align-items:center;justify-content:center;gap:6px}
+.btn i{width:18px;height:18px}
+.btn-pri{background:var(--g900);color:var(--white)}
+.btn-pri:active{opacity:.88}
+.btn-line{background:var(--white);color:var(--g900);border:1.5px solid var(--g900)}
+.btn-line:active{background:var(--g50)}
+.btn-sm{height:44px;font-size:13px}
+.btn[disabled]{opacity:.4}
+
+/* ---------- 主视觉 / App 图标 / 二维码 ---------- */
+.ref-hero{height:196px;border-radius:var(--r-lg);overflow:hidden;background:var(--g50)}
+.ref-hero svg{display:block;width:100%;height:100%}
+.app-ico{width:84px;height:84px;border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.13)}
+.app-ico svg{display:block;width:100%;height:100%}
+.ref-qrbox{width:190px;height:190px;margin:14px auto 0;background:var(--white);border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;padding:10px;box-sizing:border-box}
+.ref-qrbox svg{width:100%;height:100%;fill:#141414}
+
+/* ---------- 黑卡（裂变主视觉） ---------- */
+.hero-dark{background:var(--g900);color:var(--white);border-radius:var(--r-xl);padding:20px 18px;text-align:center;
+  position:relative;overflow:hidden}
+.hero-dark .badge{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:999px;
+  background:rgba(255,255,255,.16);font-size:11px;font-weight:700;letter-spacing:.3px}
+.hero-dark h4{font-size:19px;font-weight:800;letter-spacing:-.3px;margin:12px 0 6px}
+.hero-dark p{font-size:12px;color:rgba(255,255,255,.75);line-height:1.7}
+.hero-dark .qr{border-radius:var(--r-md);margin:14px auto 0;background:var(--white);padding:8px}
+.hero-dark .code{border:1px dashed rgba(255,255,255,.45);border-radius:var(--r-md);padding:10px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.hero-dark .code b{font-size:16px;font-weight:800;letter-spacing:2px}
+.hero-dark .code button{height:28px;padding:0 12px;border-radius:999px;background:var(--white);color:var(--g900);
+  font-size:12px;font-weight:800}
+.hero-dark .acts{display:flex;gap:8px;margin-top:12px}
+.hero-dark .acts button{flex:1;height:40px;border-radius:999px;font-size:13px;font-weight:700}
+
+/* ---------- 结果 / 状态 ---------- */
+.ok-ic{width:56px;height:56px;border-radius:50%;background:var(--g900);color:var(--white);display:flex;
+  align-items:center;justify-content:center;margin:0 auto}
+.ok-ic i{width:28px;height:28px}
+
+/* ---------- 底部操作栏 ---------- */
+.bbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.97);
+  backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px 14px calc(10px + var(--safe-b));
+  display:flex;gap:10px;max-width:430px;margin:0 auto}
+.bbar .btn{flex:1}
+.bbar .btn.sec{flex:0 0 38%}
+.bbar-hint{position:fixed;left:0;right:0;bottom:calc(70px + var(--safe-b));z-index:39;text-align:center;
+  font-size:11px;color:var(--g500);pointer-events:none}
+.dlbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.97);border-top:1px solid var(--line);
+  padding:9px 14px calc(9px + var(--safe-b));display:flex;align-items:center;gap:10px;max-width:430px;margin:0 auto}
+.dlbar .ico{width:36px;height:36px;border-radius:10px;background:var(--g900);color:var(--white);flex:none;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.dlbar .btn{width:auto;height:36px;padding:0 16px;font-size:12.5px;border-radius:999px;flex:none}
+
+/* ---------- 悬浮在线帮助 ---------- */
+.help-fab{position:fixed;right:14px;bottom:calc(84px + var(--safe-b));z-index:41;height:38px;padding:0 14px;
+  border-radius:999px;background:var(--g900);color:var(--white);font-size:12px;font-weight:700;
+  display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.help-fab i{width:14px;height:14px}
+.help-fab[hidden]{display:none}
+
+/* ---------- 屏幕切换条（评审用） ---------- */
+.dev{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + var(--safe-b));z-index:50;
+  display:none;gap:4px;background:rgba(17,17,17,.92);padding:5px;border-radius:999px;max-width:96vw;overflow-x:auto}
+.dev.show{display:flex}
+.dev button{border:none;background:transparent;color:var(--g300);font-size:11px;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.dev button.on{background:var(--white);color:var(--g900);font-weight:700}
+
+/* ---------- toast ---------- */
+#toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(17,17,17,.92);color:#fff;
+  font-size:13px;padding:11px 18px;border-radius:999px;display:none;z-index:99;max-width:82%;text-align:center;
+  line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="hs-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ed6f6"/><stop offset=".45" stop-color="#d9f0fd"/>
+      <stop offset=".72" stop-color="#eef8e6"/><stop offset="1" stop-color="#c3e5b2"/>
+    </linearGradient>
+    <radialGradient id="hs-sun" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fffce0"/><stop offset=".45" stop-color="#ffe282" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#ffd54f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hs-grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bcdfa9"/><stop offset="1" stop-color="#8cc777"/>
+    </linearGradient>
+    <linearGradient id="hs-canopy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6cc46a"/><stop offset="1" stop-color="#3ea143"/>
+    </linearGradient>
+    <radialGradient id="hs-fruit" cx=".35" cy=".3" r=".8">
+      <stop offset="0" stop-color="#ff9a8f"/><stop offset=".55" stop-color="#ef5350"/>
+      <stop offset="1" stop-color="#c62828"/>
+    </radialGradient>
+    <linearGradient id="hs-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F6D12B"/><stop offset=".5" stop-color="#F2C72D"/>
+      <stop offset="1" stop-color="#F1B62E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 主视觉：邀请场景（天空 / 云 / 阳光 / 果树 / 蜜蜂） -->
+  <symbol id="hero-scene" viewBox="0 0 750 420">
+    <rect width="750" height="420" fill="url(#hs-sky)"/>
+    <circle cx="614" cy="88" r="124" fill="url(#hs-sun)"/>
+    <g fill="#ffffff" opacity=".95">
+      <ellipse cx="128" cy="96" rx="52" ry="30"/><ellipse cx="176" cy="78" rx="40" ry="30"/>
+      <ellipse cx="92" cy="104" rx="34" ry="22"/><ellipse cx="474" cy="72" rx="36" ry="21"/>
+      <ellipse cx="506" cy="60" rx="26" ry="19"/>
+    </g>
+    <path d="M0 420 V332 C120 292 250 356 375 350 C500 344 620 298 750 326 V420 Z" fill="url(#hs-grass)"/>
+    <ellipse cx="375" cy="352" rx="150" ry="24" fill="#4b7a3f" opacity=".14"/>
+    <path d="M375 356 C368 320 366 288 372 250" stroke="#8d6e63" stroke-width="26" stroke-linecap="round" fill="none"/>
+    <path d="M369 336 C360 300 362 268 368 240" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity=".22"/>
+    <circle cx="375" cy="196" r="92" fill="url(#hs-canopy)"/>
+    <circle cx="303" cy="228" r="62" fill="#5fbf61"/><circle cx="448" cy="226" r="58" fill="#5fbf61"/>
+    <circle cx="330" cy="150" r="54" fill="#7ccb7a"/><circle cx="316" cy="158" r="30" fill="#ffffff" opacity=".18"/>
+    <g>
+      <circle cx="309" cy="180" r="14" fill="url(#hs-fruit)"/><circle cx="305" cy="176" r="3.2" fill="#ffffff" opacity=".5"/>
+      <circle cx="399" cy="152" r="14" fill="url(#hs-fruit)"/><circle cx="395" cy="148" r="3.2" fill="#ffffff" opacity=".5"/>
+      <circle cx="442" cy="212" r="14" fill="url(#hs-fruit)"/><circle cx="438" cy="208" r="3.2" fill="#ffffff" opacity=".5"/>
+      <circle cx="360" cy="240" r="14" fill="url(#hs-fruit)"/><circle cx="356" cy="236" r="3.2" fill="#ffffff" opacity=".5"/>
+      <circle cx="288" cy="238" r="14" fill="url(#hs-fruit)"/><circle cx="284" cy="234" r="3.2" fill="#ffffff" opacity=".5"/>
+      <circle cx="378" cy="118" r="14" fill="url(#hs-fruit)"/><circle cx="374" cy="114" r="3.2" fill="#ffffff" opacity=".5"/>
+    </g>
+    <path d="M62 268 Q112 244 148 218" stroke="#8a8a8a" stroke-width="2.4" fill="none" stroke-dasharray="7 9" opacity=".45"/>
+    <g transform="translate(152 190)">
+      <ellipse cx="-9" cy="-16" rx="14" ry="8.5" fill="#ffffff" opacity=".72" transform="rotate(-32 -9 -16)"/>
+      <ellipse cx="12" cy="-16" rx="14" ry="8.5" fill="#ffffff" opacity=".72" transform="rotate(32 12 -16)"/>
+      <ellipse cx="3" cy="2" rx="22" ry="15.5" fill="#ffca28"/>
+      <rect x="-4" y="-11" width="5.5" height="26" fill="#3e2723"/>
+      <rect x="7" y="-13" width="5.5" height="28" fill="#3e2723"/>
+      <circle cx="25" cy="-1" r="7.5" fill="#3e2723"/>
+    </g>
+  </symbol>
+
+  <!-- 官方标记：平顶六边形 + 流动曲线 -->
+  <symbol id="bee-mark" viewBox="0 0 64 64">
+    <rect width="64" height="64" rx="15" fill="url(#hs-gold)"/>
+    <path d="M32 13 L46.5 21.5 V38.5 L32 47 L17.5 38.5 V21.5 Z" fill="none" stroke="#141414" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M26 24 C23 28 23 32 26 36" fill="none" stroke="#141414" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M32 22 C29 27 29 33 32 38" fill="none" stroke="#141414" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M38 24 C35 28 35 32 38 36" fill="none" stroke="#141414" stroke-width="2.4" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
+  <!-- ============ 顶部品牌条 ============ -->
+  <header class="topbar">
+    <button class="tb-back" id="tb-back" hidden aria-label="返回" onclick="back()"><i data-i="chevron-left"></i></button>
+    <div class="brand" onclick="tapBrand()" title="连点 3 次可显示/隐藏屏幕切换条">
+      <img class="brand-logo" src="data:image/png;base64,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" alt="蜂巢">
+      <div>
+        <div class="brand-name">蜂巢</div>
+        <div class="brand-sub">HONEYCOMB GLOBAL STORE</div>
+      </div>
+    </div>
+    <button class="tb-dl" onclick="go('p-dl')">下载 App</button>
+  </header>
+
+  <main>
+
+  <!-- ==================== 1. 变体 A：带套餐 ID（好友推荐了具体套餐） ==================== -->
+  <section class="page on" id="p-a">
+    <div class="ref-hero">
+      <svg viewBox="0 0 750 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#hero-scene"/></svg>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>好友邀请</span><span class="stp">邀请码 <b id="a-code-top">FC-8K2Q</b></span></div>
+      <h2 class="ref-h2">李贤宇 邀你办理<br>蜂巢后付套餐</h2>
+      <p class="t-sub">先办套餐、后付月费，办理即返 1 个月话费；<br>网页端即可完成申请，无需下载 App。</p>
+      <div class="ref-card pad mt12">
+        <div class="inv">
+          <span class="inv-ava">李</span>
+          <div class="grow">
+            <div style="font-size:14px;font-weight:700">李贤宇 <span class="tag" style="margin-left:4px">邀请人</span></div>
+            <div class="t-sub" style="margin-top:3px">已通过蜂巢办理后付套餐 · 邀请你一起</div>
+          </div>
+        </div>
+        <div class="ref-kv" style="margin-top:6px">
+          <span class="k">好友邀请码</span>
+          <span class="code-chip"><b id="code-a">FC-8K2Q</b><button class="btn-copy" onclick="copyCode('code-a')">复制</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>好友推荐套餐</span><span>主推活动</span></div>
+      <h3 class="ref-h3">李贤宇 给你推荐了这款</h3>
+      <div id="a-plan"></div>
+      <div id="a-calc"></div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>办理权益</span></div>
+      <h3 class="ref-h3">通过邀请链接办理，你能拿到什么</h3>
+      <div class="ref-card pad" id="a-bnf"></div>
+      <div class="ref-notice" id="a-notice"></div>
+    </div>
+
+    <div class="ref-sec" style="margin-bottom:8px"></div>
+  </section>
+
+  <!-- ==================== 2. 变体 B：仅邀请码（系统推荐） ==================== -->
+  <section class="page" id="p-b">
+    <div class="ref-hero">
+      <svg viewBox="0 0 750 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#hero-scene"/></svg>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>好友邀请</span><span class="stp">邀请码 <b id="b-code-top">FC-8K2Q</b></span></div>
+      <h2 class="ref-h2">好友邀你加入<br>蜂巢后付套餐</h2>
+      <p class="t-sub">零月租压力 · 先办套餐后付月费 · 办理即返话费</p>
+      <div class="ref-card pad mt12">
+        <div class="inv">
+          <span class="inv-ava">李</span>
+          <div class="grow">
+            <div style="font-size:14px;font-weight:700">李贤宇 <span class="tag" style="margin-left:4px">邀请人</span></div>
+            <div class="t-sub" style="margin-top:3px">邀请你办理蜂巢后付套餐，双方各得返现</div>
+          </div>
+        </div>
+        <div class="ref-kv" style="margin-top:6px">
+          <span class="k">好友邀请码</span>
+          <span class="code-chip"><b id="code-b">FC-8K2Q</b><button class="btn-copy" onclick="copyCode('code-b')">复制</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>系统推荐</span><span>按人气与优惠排序</span></div>
+      <h3 class="ref-h3">为你挑选的套餐</h3>
+      <div id="b-plans"></div>
+      <button class="btn btn-line btn-sm mt12" onclick="go('p-pick')">按流量 / 月费挑选</button>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>办理权益</span></div>
+      <h3 class="ref-h3">邀请办理的三重好处</h3>
+      <div class="ref-card pad" id="b-bnf"></div>
+      <div class="ref-notice" id="b-notice"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. 套餐列表（Web 办理入口） ==================== -->
+  <section class="page" id="p-pick">
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>选择套餐</span><span id="pk-hint">共 5 档 · 每档推荐 3 款</span></div>
+      <h2 class="ref-h2">按流量或月费挑一款</h2>
+      <p class="t-sub">拖动滑块选档位，下面给出最匹配的套餐与相邻档位对比；点卡片即可快速查看详情。</p>
+
+      <div class="seg mt12" id="pk-seg">
+        <button class="on" id="pk-m-data" onclick="setPlanMode('data')">数据流量</button>
+        <button id="pk-m-fee" onclick="setPlanMode('fee')">月费</button>
+      </div>
+
+      <div class="pm-amt">
+        <div class="row" style="justify-content:center"><span class="pm-num" id="pk-num">60</span><span class="pm-unit" id="pk-unit">GB / 月</span></div>
+        <div class="t-sub" style="font-size:12px;margin-top:6px;text-align:center">拖动滑块 · 智能推荐为你匹配套餐</div>
+      </div>
+
+      <div class="pm-slider">
+        <div class="pm-bubrow"><span class="pm-bub" id="pk-bub">60GB</span></div>
+        <div class="pm-range">
+          <input type="range" id="pk-range" min="0" max="4" step="1" value="2" oninput="onParamSlide(this.value)">
+          <span class="pm-tick" id="pkt0"></span><span class="pm-tick" id="pkt1"></span><span class="pm-tick" id="pkt2"></span><span class="pm-tick" id="pkt3"></span><span class="pm-tick" id="pkt4"></span>
+        </div>
+        <div class="pm-scales" id="pk-scales"></div>
+      </div>
+
+      <div class="row-between" style="margin:18px 2px 0">
+        <span style="font-size:15px;font-weight:800">为你推荐</span>
+        <span class="t-sub" style="font-size:11px">3 个套餐 · 按当前档位匹配</span>
+      </div>
+      <div id="pk-cards" class="mt12"></div>
+      <div class="t-sub" style="font-size:11px;margin:10px 2px 0;line-height:1.7">标注「需到店」的套餐需在 App 内预约门店办理；网页端仅支持线上实体卡办理。</div>
+    </div>
+  </section>
+
+
+  <!-- ==================== 5. 申请 STEP 1 · 办理方式 ==================== -->
+  <section class="page" id="p-s1">
+    <div class="ref-eyebrow"><span>线上办理申请</span><span class="stp">STEP 1 / 5</span></div>
+    <div class="step-prog"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div>
+    <h2 class="ref-h2">选择办理方式</h2>
+    <p class="t-sub">网页端仅支持线上办理（免 eSIM、免到店），资料填完后线上审核开通。</p>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>办理渠道</span></div>
+      <div class="opts">
+        <button class="opt on" onclick="pickWay(this,'online')"><b>线上办理</b><span>网页直接申请 · 证件拍照上传</span></button>
+        <button class="opt disabled" onclick="toast('到店办理需在 App 内预约，网页端暂不支持')"><b>到店办理</b><span>需预约门店办理 · 网页端不支持</span></button>
+      </div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>办理类型</span></div>
+      <div class="opts">
+        <button class="opt on" onclick="pickType(this,'new')"><b>新开号码</b><span>分配新号码 · 可自选尾号</span></button>
+        <button class="opt" onclick="pickType(this,'move')"><b>号码转移</b><span>沿用原号码 · 需原运营商信息</span></button>
+      </div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>实名证件</span><span id="s1-id-note">网页端仅支持以下两类</span></div>
+      <div class="opts">
+        <button class="opt on" onclick="pickId(this,'arc')"><b>外国人登陆证</b><span>银行信息必填 · 可正常开通</span></button>
+        <button class="opt" onclick="pickId(this,'pass')"><b>护照</b><span>银行信息可跳过 · 90 天内补齐</span></button>
+      </div>
+      <div class="ref-notice" id="s1-notice"></div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>办理流程</span></div>
+      <div class="ref-card pad">
+        <div class="ref-step"><span class="no">1</span><div class="tx"><b>办理方式与证件</b><span>线上办理 · 选择实名证件类型</span></div></div>
+        <div class="ref-step"><span class="no">2</span><div class="tx"><b>手机号验证</b><span>验证码免登录 · 同时绑定邀请关系</span></div></div>
+        <div class="ref-step"><span class="no">3</span><div class="tx"><b>填写资料</b><span>姓名、联系方式、收货地址、尾号</span></div></div>
+        <div class="ref-step"><span class="no">4</span><div class="tx"><b>证件与账户</b><span>证件上传 · 银行卡 / 存折信息</span></div></div>
+        <div class="ref-step"><span class="no">5</span><div class="tx"><b>协议与签名</b><span>阅读协议 · 手写签名后提交</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. 申请 STEP 2 · 手机号验证 + 绑定邀请关系 ==================== -->
+  <section class="page" id="p-s2">
+    <div class="ref-eyebrow"><span>线上办理申请</span><span class="stp">STEP 2 / 5</span></div>
+    <div class="step-prog"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
+    <h2 class="ref-h2">手机号验证</h2>
+    <p class="t-sub">无需注册即可申请，验证码通过即完成身份校验，并自动绑定好友邀请关系。</p>
+
+    <div class="ref-sec">
+      <div class="ref-card pad">
+        <div class="field">
+          <label class="f-label">手机号<em>*</em></label>
+          <div class="input"><i data-i="phone"></i><input id="s2-phone" type="tel" inputmode="numeric" placeholder="请输入手机号（用于接收开通短信）"></div>
+        </div>
+        <div class="field">
+          <label class="f-label">验证码<em>*</em></label>
+          <div class="input-code">
+            <div class="input"><i data-i="lock"></i><input id="s2-code" type="text" inputmode="numeric" placeholder="6 位验证码"></div>
+            <button class="code-btn" id="s2-send" onclick="sendCode()">获取验证码</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>邀请关系</span><span id="s2-bind-state">待绑定</span></div>
+      <h3 class="ref-h3">邀请人信息</h3>
+      <div class="ref-card pad">
+        <div class="inv">
+          <span class="inv-ava">李</span>
+          <div class="grow">
+            <div style="font-size:14px;font-weight:700">李贤宇</div>
+            <div class="t-sub" style="margin-top:3px">通过该邀请链接进入 · 邀请码 <b id="s2-code-show">FC-8K2Q</b></div>
+          </div>
+        </div>
+        <div class="ref-kv" style="margin-top:6px"><span class="k">绑定状态</span><span class="v sm" id="s2-bind-text">验证码验证后自动绑定</span></div>
+      </div>
+      <div class="ref-notice" id="s2-notice"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 7. 申请 STEP 3 · 填写资料 ==================== -->
+  <section class="page" id="p-s3">
+    <div class="ref-eyebrow"><span>线上办理申请</span><span class="stp">STEP 3 / 5</span></div>
+    <div class="step-prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></div>
+    <h2 class="ref-h2">填写申请资料</h2>
+    <p class="t-sub">用于实名开通与实体卡邮寄，请与证件信息保持一致。</p>
+
+    <div class="ref-sec">
+      <div class="ref-card pad">
+        <div class="field">
+          <label class="f-label">姓名（与证件一致）<em>*</em></label>
+          <div class="input"><i data-i="user"></i><input id="s3-name" type="text" placeholder="请输入姓名"></div>
+        </div>
+        <div class="field">
+          <label class="f-label">联系电话<em>*</em></label>
+          <div class="input"><i data-i="phone"></i><input id="s3-tel" type="tel" inputmode="numeric" placeholder="可联系到你的手机号"></div>
+          <div class="t-sub" id="s3-tel-hint" style="margin-top:6px">用于开通通知与配送联系</div>
+        </div>
+        <div class="field">
+          <label class="f-label">收货地址<em>*</em></label>
+          <div class="input"><i data-i="map"></i><input id="s3-addr" type="text" placeholder="邮寄实体卡的详细地址（含邮编）"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-sec" id="s3-tail-sec">
+      <div class="ref-eyebrow"><span>新开尾号</span><span>可留空由系统分配</span></div>
+      <div class="tail">
+        <input id="tail-1" maxlength="4" inputmode="numeric" placeholder="0000" oninput="tailInput(this)">
+        <input id="tail-2" maxlength="4" inputmode="numeric" placeholder="0000" oninput="tailInput(this)">
+        <input id="tail-3" maxlength="4" inputmode="numeric" placeholder="0000" oninput="tailInput(this)">
+        <span class="t-sub">期望尾号（3 个备选）</span>
+      </div>
+      <div class="ref-notice">
+        <div class="ni open"><div class="nq" onclick="toggleNi(this)"><span>尾号分配规则</span><i data-i="chevron-right"></i></div>
+          <div class="na">线上无法即时核验尾号占用情况；若 3 个备选均已被占用，将随机分配相近号码，以开通短信为准。</div></div>
+      </div>
+    </div>
+
+    <div class="ref-sec" id="s3-move-sec" style="display:none">
+      <div class="ref-eyebrow"><span>号码转移信息</span></div>
+      <div class="ref-card pad">
+        <div class="ref-kv"><span class="k">转移号码</span><span class="v" id="s3-move-no">—</span></div>
+        <div class="ref-kv"><span class="k">原运营商</span><span class="v">KT</span></div>
+        <div class="ref-kv"><span class="k">转移生效</span><span class="v">资料审核通过后 24 小时内</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 8. 申请 STEP 4 · 证件与账户 ==================== -->
+  <section class="page" id="p-s4">
+    <div class="ref-eyebrow"><span>线上办理申请</span><span class="stp">STEP 4 / 5</span></div>
+    <div class="step-prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></div>
+    <h2 class="ref-h2">证件与账户信息</h2>
+    <p class="t-sub" id="s4-lead">上传实名证件照片，并填写用于月费代扣的银行卡信息。</p>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>实名证件</span><span id="s4-id-type">外国人登陆证</span></div>
+      <label class="up" id="up-front">
+        <i data-i="upload"></i>
+        <span class="grow"><b id="up-front-t">上传证件正面</b><span>支持 JPG / PNG，单张 ≤ 5MB</span></span>
+        <i data-i="chevron-right"></i>
+        <input type="file" accept="image/*" onchange="onFile('front',this)">
+      </label>
+      <div class="mt8"></div>
+      <label class="up" id="up-back">
+        <i data-i="upload"></i>
+        <span class="grow"><b id="up-back-t">上传证件反面</b><span>需四角完整、文字清晰可辨</span></span>
+        <i data-i="chevron-right"></i>
+        <input type="file" accept="image/*" onchange="onFile('back',this)">
+      </label>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>代扣账户</span><span>二选一</span></div>
+      <div class="seg" style="margin-bottom:12px">
+        <button class="on" id="bank-seg-card" onclick="setBank('card')">银行卡 / 借记卡</button>
+        <button id="bank-seg-book" onclick="setBank('book')">存折账号</button>
+      </div>
+      <div class="ref-card pad">
+        <div class="field" id="f-cardno">
+          <label class="f-label">卡号 / 账号<em>*</em></label>
+          <div class="input"><i data-i="card"></i><input id="s4-cardno" type="tel" inputmode="numeric" placeholder="请输入卡号"></div>
+        </div>
+        <div class="field" id="f-exp">
+          <label class="f-label">有效期<em>*</em></label>
+          <div class="input"><i data-i="clock"></i><input id="s4-exp" type="text" placeholder="MM / YY"></div>
+        </div>
+        <div class="field">
+          <label class="f-label">银行名称<em>*</em></label>
+          <div class="input"><i data-i="bank"></i><input id="s4-bank" type="text" placeholder="如：国民银行 / KB 银行"></div>
+        </div>
+      </div>
+      <div class="ref-notice" id="s4-notice"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 9. 申请 STEP 5 · 协议与签名 ==================== -->
+  <section class="page" id="p-s5">
+    <div class="ref-eyebrow"><span>线上办理申请</span><span class="stp">STEP 5 / 5</span></div>
+    <div class="step-prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    <h2 class="ref-h2">协议与电子签名</h2>
+    <p class="t-sub">提交前请确认办理内容与条款，签名即视为已阅读并同意下列协议。</p>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>办理确认</span></div>
+      <div class="ref-card pad" id="s5-sum"></div>
+      <div class="ref-calc" id="s5-calc"></div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>需签署协议</span><span>3 份</span></div>
+      <div class="ref-card pad" id="s5-agreements"></div>
+      <label class="row mt12" style="gap:8px;cursor:pointer" onclick="toggleAgree()">
+        <span class="cbx" id="s5-agree">✓</span>
+        <span class="t-sub">我已阅读并同意《服务协议》《实名认证授权书》《电子签名同意书》与裂变活动规则</span>
+      </label>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>手写签名</span><span id="sign-state">待签名</span></div>
+      <div class="sign-wrap">
+        <canvas id="sign-canvas"></canvas>
+        <div class="sign-ph" id="sign-ph">请在此区域手写签名</div>
+      </div>
+      <div class="sign-bar">
+        <span class="t-sub">签名将与证件信息一并用于开通审核</span>
+        <button class="btn btn-line btn-sm" style="width:auto;padding:0 14px" onclick="clearSign()">重写</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 10. 提交成功 · 办理已受理 ==================== -->
+  <section class="page" id="p-done">
+    <div class="ref-sec" style="text-align:center">
+      <div class="ok-ic"><i data-i="check"></i></div>
+      <h2 class="ref-h2" style="margin:14px 0 6px">办理已受理</h2>
+      <p class="t-sub" id="done-lead">资料已提交，审核通过后将按所选时段为您开通。</p>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>申请摘要</span><span id="done-no">单号 —</span></div>
+      <div class="ref-card pad" id="done-sum"></div>
+      <div class="ref-calc" id="done-calc"></div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>办理成功后</span></div>
+      <h3 class="ref-h3">套餐 · 返利 · 合约 · 停机</h3>
+      <div class="ref-card pad" id="done-info"></div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>邀请裂变</span><span>限时活动</span></div>
+      <div class="hero-dark">
+        <span class="badge"><i data-i="zap" style="width:12px;height:12px"></i> 限时裂变 · 双方各得 1 个月话费</span>
+        <h4>邀请好友办理<br>你我各得 1 个月话费返现</h4>
+        <p>好友通过你的二维码或邀请码进入并完成首单，即可计入有效邀请，返现资格可累计。</p>
+        <div class="ref-qrbox" id="done-qr"></div>
+        <div class="code">
+          <span style="text-align:left"><span style="font-size:11px;color:rgba(255,255,255,.7)">我的邀请码</span><b style="display:block" id="done-code">FC-8K2Q</b></span>
+          <button onclick="copyCode('done-code')">复制</button>
+        </div>
+        <div class="acts">
+          <button style="background:#fff;color:var(--g900)" onclick="shareInvite()">分享邀请</button>
+          <button style="background:rgba(255,255,255,.16);color:#fff" onclick="toast('邀请海报已保存到相册')">保存海报</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>接下来会发生什么</span></div>
+      <h3 class="ref-h3">开通流程</h3>
+      <div class="ref-card pad">
+        <div class="ref-step"><span class="no">1</span><div class="tx"><b>证件审核</b><span>提交后约 10 分钟内完成审核，结果以短信通知</span></div></div>
+        <div class="ref-step"><span class="no">2</span><div class="tx"><b>号码开通</b><span>09:00–21:00 完成开通；非工作时间顺延至次日</span></div></div>
+        <div class="ref-step"><span class="no">3</span><div class="tx"><b>实体卡邮寄</b><span>新开号码按地址寄出，开通后 1–3 个工作日送达</span></div></div>
+        <div class="ref-step"><span class="no">4</span><div class="tx"><b>返现到账</b><span>计入果园，按周发放；合约期满可领取额外返现</span></div></div>
+      </div>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>继续使用</span></div>
+      <div class="ref-card pad" id="done-next"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 11. 下载引导页 ==================== -->
+  <section class="page" id="p-dl">
+    <div class="ref-sec" style="text-align:center">
+      <div class="app-ico" style="margin:0 auto"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bee-mark"/></svg></div>
+      <h2 class="ref-h2" style="margin:16px 0 6px">下载蜂巢 App</h2>
+      <p class="t-sub">查办理进度 · 领返现 · 邀请好友 · 管理套餐与充值</p>
+      <div class="ref-qrbox" id="dl-qr" style="margin:16px auto 0"></div>
+      <div class="row mt16" style="gap:10px">
+        <button class="btn btn-pri btn-sm" onclick="toast('正在前往 App Store')">App Store</button>
+        <button class="btn btn-line btn-sm" onclick="toast('正在前往 Google Play')">Google Play</button>
+      </div>
+      <button class="btn btn-line btn-sm mt12" onclick="openApp()"><i data-i="zap"></i>已安装？直接打开蜂巢 App</button>
+      <p class="t-sub" style="margin-top:12px">已复制信息：邀请码 <b id="dl-code">FC-8K2Q</b>、套餐、订单号（通过链接自动带回 App）</p>
+    </div>
+
+    <div class="ref-sec">
+      <div class="ref-eyebrow"><span>常见问题</span></div>
+      <div class="ref-notice" id="dl-notice"></div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ==================== 套餐详情（底部抽屉 · 点击直接拉出，不跳全屏） ==================== -->
+  <div class="pd-mask" id="pd-mask" onclick="closePD()"></div>
+  <div class="pd-sheet" id="pd-sheet" role="dialog" aria-label="套餐详情">
+    <div class="pd-grab"></div>
+    <div class="pd-hd">
+      <button class="pd-back" onclick="closePD()" aria-label="关闭"><i data-i="chevron-left"></i></button>
+      <span class="pd-title">套餐详情</span>
+      <span class="pd-nav">
+        <button onclick="stepPlan(-1)" aria-label="上一个套餐"><i data-i="chevron-left"></i></button>
+        <button onclick="stepPlan(1)" aria-label="下一个套餐"><i data-i="chevron-right"></i></button>
+      </span>
+    </div>
+    <div class="pd-body">
+      <!-- 左右结构：左＝名称/标签/运营商 ·右＝月付价格 -->
+      <div class="pd-hero">
+        <div class="pd-hero-l">
+          <div class="plan-name" id="dt-name"></div>
+          <div class="plan-sub" id="dt-sub"></div>
+          <div class="pd-tags" id="dt-tag"></div>
+        </div>
+        <div class="pd-hero-r">
+          <b id="dt-price"></b><span>/ 月</span>
+          <s id="dt-orig"></s>
+        </div>
+      </div>
+      <!-- 左右两列参数宫格（与 App 同 6 格） -->
+      <div class="pd-grid" id="dt-spec"></div>
+
+      <!-- 返现专区（与 App 同构：金额醒目 + 发放方式 + 领取条件） -->
+      <div class="pd-sec">
+        <div class="ref-card pad" style="background:var(--g50)">
+          <div class="row" style="gap:6px;align-items:center;font-size:12px;font-weight:600;color:var(--g700)">
+            <i data-i="zap" style="width:13px;height:13px"></i>办理完成后返现 · 自动到账无需申请
+          </div>
+          <div id="dt-cash-amt" style="font-size:26px;font-weight:800;letter-spacing:-.5px;margin-top:8px"></div>
+          <div class="t-sub" style="font-size:11px;margin-top:3px" id="dt-cash-time"></div>
+          <div class="t-sub" style="font-size:11px;margin-top:7px;line-height:1.65" id="dt-cash-cond"></div>
+        </div>
+      </div>
+
+      <!-- 有效期与合约 -->
+      <div class="pd-sec">
+        <div class="pd-sec-t">有效期与合约</div>
+        <div class="ref-card pad">
+          <div class="ref-kv"><span class="k">有效期</span><span class="v" id="dt-validity"></span></div>
+          <div class="ref-kv"><span class="k">合约期</span><span class="v" id="dt-term2"></span></div>
+          <div class="ref-kv"><span class="k">宽带共享</span><span class="v" id="dt-bw"></span></div>
+        </div>
+      </div>
+
+      <!-- 使用说明 -->
+      <div class="pd-sec">
+        <div class="pd-sec-t">使用说明</div>
+        <div class="ref-card pad" id="dt-feats"></div>
+      </div>
+
+      <!-- 注意事项 -->
+      <div class="pd-sec">
+        <div class="pd-sec-t">注意事项</div>
+        <div class="ref-card pad" id="dt-notice"></div>
+      </div>
+
+      <!-- 办理方式 -->
+      <div class="pd-sec">
+        <div class="ref-card pad">
+          <div class="ref-kv"><span class="k">办理方式</span><span class="v sm" id="dt-way"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pd-foot">
+      <button class="btn btn-pri" id="dt-apply" onclick="applyFromPD()">立即办理</button>
+    </div>
+  </div>
+
+  <!-- 悬浮在线帮助 -->
+  <button class="help-fab" id="help-fab" hidden onclick="toast('正在接入在线客服')"><i data-i="info"></i>在线帮助</button>
+
+  <!-- 底部操作栏（JS 按页面渲染） -->
+  <div class="bbar" id="bbar"></div>
+
+  <!-- 屏幕切换条（评审用） -->
+  <div class="dev" id="dev">
+    <button class="on" data-p="p-a" onclick="dev(this)">变体A</button>
+    <button data-p="p-b" onclick="dev(this)">变体B</button>
+    <button data-p="p-pick" onclick="dev(this)">选套餐</button>
+    <button data-p="p-s1" onclick="dev(this)">STEP1</button>
+    <button data-p="p-s2" onclick="dev(this)">STEP2</button>
+    <button data-p="p-s3" onclick="dev(this)">STEP3</button>
+    <button data-p="p-s4" onclick="dev(this)">STEP4</button>
+    <button data-p="p-s5" onclick="dev(this)">STEP5</button>
+    <button data-p="p-done" onclick="dev(this)">受理</button>
+    <button data-p="p-dl" onclick="dev(this)">下载</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   蜂巢 H5 · 邀请落地页 + Web 端后付申请
+   口径（与 App 保持一致）：
+   1) 链接携带 邀请码 / 套餐ID / 订单ID；带套餐ID → 变体A（好友推荐），仅邀请码 → 变体B（系统推荐）
+   2) 扫码即进入网页：无需下载 App 也能完成后付申请；同时推荐下载（已安装 → scheme 唤起）
+   3) 邀请关系：首次进入绑定，一人仅可绑定一个邀请人，超 24 小时不可补绑
+   4) 网页端仅线上办理；eSIM / 到店 / 家庭共享 / 宽带需在 App 内
+   5) 话费充值：不返现、不支持优惠券，仅按比例返还积分
+   ============================================================ */
+
+/* ---------- 图标（inline SVG sprite，24 viewBox / stroke 现行） ---------- */
+var ICONS={
+  'chevron-left':'<path d="M15 18l-6-6 6-6"/>',
+  'chevron-right':'<path d="M9 18l6-6-6-6"/>',
+  'check':'<path d="M20 6L9 17l-5-5"/>',
+  'user':'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  'users':'<path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/>',
+  'phone':'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/>',
+  'zap':'<path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>',
+  'lock':'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  'upload':'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/>',
+  'download':'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/>',
+  'card':'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  'bank':'<path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6"/>',
+  'clock':'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  'map':'<path d="M12 22s7-6.3 7-12A7 7 0 1 0 5 10c0 5.7 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/>',
+  'info':'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  'gift':'<path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7S9.5 2.5 7 5s5 2 5 2z"/><path d="M12 7s2.5-4.5 5-2-5 2-5 2z"/>',
+  'sprout':'<path d="M12 21V11"/><path d="M12 11C12 6 8 4 4 4c0 5 4 7 8 7z"/><path d="M12 13c0-4 3.5-6 7-6 0 4-3 6-7 6z"/>',
+  'shield':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>',
+  'alert':'<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  'wifi':'<path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5 5 0 0 1 7 0"/><path d="M12 19h.01"/>'
+};
+function svgFor(n){
+  var p=ICONS[n]||ICONS['info'];
+  return '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
+}
+function injectIcons(root){
+  (root||document).querySelectorAll('i[data-i]').forEach(function(el){
+    if(el.getAttribute('data-injected')) return;
+    el.setAttribute('data-injected','1');
+    el.innerHTML=svgFor(el.getAttribute('data-i'));
+  });
+}
+
+/* ---------- 数据（与 App DB 同源） ---------- */
+var PLANS=[
+  {id:'p1',name:'轻享 30GB',price:33000,orig:38500,data:'30GB',call:'无限通话',sms:'300条',
+   unl:'1mbps',addcall:'无附加通话',net:'5G',carrier:'KT',term:'无合约期',online:1,tag:'NEW',
+   cash:3300, off:14, promo:'首月优惠 14% · 次月起原价', validity:'30天', bw:0,
+   use:'办理成功后 24 小时内生效；流量按自然月计费，未用完部分可结转 1 个月（结转上限 30GB）',
+   notice:'合约期内可于 APP 内自助办理停机；办理需实名认证；线上办理需拍照 / 扫描证件'},
+  {id:'p2',name:'均衡 60GB',price:55000,orig:66000,data:'60GB',call:'无限通话',sms:'300条',
+   unl:'3mbps',addcall:'含附加通话 100 分钟',net:'5G',carrier:'SKT',term:'无合约期',online:1,tag:'HOT',
+   cash:5500, off:17, promo:'首月优惠 17% · 次月起原价', validity:'30天', bw:0,
+   use:'办理成功后 24 小时内生效；流量按自然月计费，未用完部分可结转 1 个月（结转上限 40GB）',
+   notice:'合约期内可于 APP 内自助办理停机；办理需实名认证；线上办理需拍照 / 扫描证件'},
+  {id:'p3',name:'畅享 100GB',price:88000,orig:110000,data:'100GB 不限速',call:'无限通话',sms:'300条',
+   unl:'完全高速流量',addcall:'含附加通话 300 分钟',net:'5G',carrier:'SKT',term:'12 个月合约',online:1,tag:'推荐',
+   cash:8800, off:20, promo:'限时特价 · 前 3 个月享 20% 优惠', validity:'30天', bw:0,
+   use:'办理成功后 24 小时内生效；超出高速流量后限速 5Mbps；含 5G 优先接入',
+   notice:'合约期内可于 APP 内自助办理停机；12 个月合约期内解约需支付违约金；线上 / 到店均可办理'},
+  {id:'p4',name:'基础 15GB',price:22000,orig:25000,data:'15GB',call:'200 分钟',sms:'100条',
+   unl:'无',addcall:'无附加通话',net:'LTE',carrier:'KT',term:'无合约期',online:1,tag:'低月租',
+   cash:2200, off:0, promo:'价格长期直降 · 无首月加价', validity:'30天', bw:0,
+   use:'办理成功后 24 小时内生效；流量当月有效',
+   notice:'办理需实名认证；线上办理需拍照 / 扫描证件'},
+  {id:'p5',name:'家庭共享 5G',price:99000,orig:120000,data:'200GB + 副卡 2 张',call:'无限通话',sms:'无限短信',
+   unl:'10mbps',addcall:'含家庭共享通话',net:'5G',carrier:'LG U+',term:'12 个月合约',online:0,tag:'需到店',
+   cash:9900, off:0, promo:'前 6 个月优惠 · 之后原价（幅度见活动说明）', validity:'30天', bw:1,
+   use:'主卡 + 2 张副卡共享套餐内流量；办理需主卡本人到店并提供家庭成员证件',
+   notice:'仅支持到店办理；12 个月合约期内解约需支付违约金'},
+  {id:'p6',name:'光纤宽带 + TV',price:33000,orig:39600,data:'500M 光纤',call:'固话 200 分钟',sms:'—',
+   unl:'无',addcall:'固话 200 分钟',net:'光纤 + TV',carrier:'SKT',term:'24 个月合约',online:0,tag:'需到店',
+   cash:3300, off:0, promo:'前 3 个月优惠 · 之后原价（幅度见活动说明）', validity:'30天', bw:1,
+   use:'含机顶盒 1 台 + 基础 TV 频道；工程师上门安装，需提前预约',
+   notice:'仅支持到店办理；安装需确认房屋网络线路条件'},
+  {id:'p7',name:'校园 5G 专属',price:44000,orig:52800,data:'80GB',call:'无限通话',sms:'300条',
+   unl:'5mbps',addcall:'无附加通话',net:'5G',carrier:'KT',term:'无合约期',online:1,tag:'NEW',
+   cash:4400, off:17, promo:'首月优惠 17% · 次月起原价', validity:'30天', bw:0,
+   use:'面向学生认证用户；办理成功后 24 小时内生效；流量按自然月计费',
+   notice:'需学生身份认证；合约期内可自助办理停机'}
+];
+
+var S={ code:'FC-8K2Q', planId:'p3', orderId:'', variant:'a',
+        step:1, way:'online', type:'new', idType:'arc', bound:false,
+        bank:'card', files:{front:false,back:false}, agree:false, signed:false,
+        inviteName:'李贤宇' };
+
+var MACHINE=new Date().getHours()>=9 && new Date().getHours()<21;
+var WON=function(n){ return '₩'+n.toLocaleString('en-US'); };
+
+/* ---------- 路由 ---------- */
+var STACK=[];
+var PAGES=['p-a','p-b','p-pick','p-s1','p-s2','p-s3','p-s4','p-s5','p-done','p-dl'];
+var cur='p-a';
+function go(id){
+  if(PAGES.indexOf(id)<0) return;
+  if(id!==cur) STACK.push(cur);
+  show(id);
+}
+function show(id){
+  cur=id;
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
+  var el=document.getElementById(id); if(el) el.classList.add('on');
+  document.querySelectorAll('.dev button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-p')===id); });
+  document.getElementById('tb-back').hidden = (id==='p-a'||id==='p-b');
+  document.getElementById('help-fab').hidden = !(id.indexOf('p-s')===0);
+  /* 进入即按当前 state 重绘该页（避免残留上一状态的渲染结果） */
+  if(typeof ONENTER!=='undefined' && ONENTER[id]) ONENTER[id]();
+  renderBar();
+  window.scrollTo(0,0);
+}
+function back(){
+  var id=STACK.pop()|| (S.variant==='a'?'p-a':'p-b');
+  show(id);
+}
+function dev(btn){
+  STACK.length=0;
+  var id=btn.getAttribute('data-p');
+  if(id==='p-a') S.variant='a';
+  if(id==='p-b') S.variant='b';
+  show(id);
+}
+
+/* ---------- 渲染：权益 / 公告 ---------- */
+function bnfList(){
+  return ''
+  +'<div class="bnf"><i data-i="zap"></i><span><b>双方各返 1 个月话费</b>：你完成首单后，你与邀请人各得 1 个月话费返现资格，可累加。</span></div>'
+  +'<div class="bnf"><i data-i="gift"></i><span><b>果园多一棵树</b>：好友套餐生效后，果园中生长一棵对应价值的树，成熟即可收获。</span></div>'
+  +'<div class="bnf"><i data-i="shield"></i><span><b>网页直接办理</b>：无需下载 App，线上完成资料、证件与电子签名。</span></div>'
+  +'<div class="bnf"><i data-i="info"></i><span><b>话费充值口径</b>：充值不返现，仅按比例返还积分。</span></div>';
+}
+function inviteNotice(){
+  return ''
+  +'<div class="nt"><i data-i="info" style="width:14px;height:14px"></i>重要提示 · 邀请规则</div>'
+  +'<div class="ni open"><div class="nq" onclick="toggleNi(this)"><span>邀请关系如何绑定</span><i data-i="chevron-right"></i></div>'
+    +'<div class="na">通过好友的邀请链接或二维码首次进入时即可绑定；一个用户仅允许绑定一个邀请人，超过 24 小时不可补绑。</div></div>'
+  +'<div class="ni"><div class="nq" onclick="toggleNi(this)"><span>什么算「有效邀请」</span><i data-i="chevron-right"></i></div>'
+    +'<div class="na">新用户完成首单后视为有效邀请；被邀请人用满合约期（不含停机天数）后，邀请人可领取额外返现。</div></div>'
+  +'<div class="ni"><div class="nq" onclick="toggleNi(this)"><span>返现如何发放</span><i data-i="chevron-right"></i></div>'
+    +'<div class="na">返现计入果园，按周发放（每周五）；达到条件后可在 App 内领取，用于抵扣话费或商城消费。</div></div>';
+}
+function toggleNi(el){ el.parentNode.classList.toggle('open'); }
+
+/* ---------- 渲染：套餐卡 ---------- */
+function planCard(p,opts){
+  opts=opts||{};
+  var dis=p.online? '':' disabled';
+  return '<div class="plan'+dis+'" onclick="'+(p.online?('openPD(\''+p.id+'\')'):'toast(\'该套餐需到店办理，请在 App 内预约门店\')')+'">'
+    +'<div class="plan-hd">'
+      +'<div style="min-width:0">'
+        +'<div class="plan-name">'+p.name+'</div>'
+        +'<div class="plan-sub">'+p.net+' · '+p.carrier+' · '+p.term+'</div>'
+      +'</div>'
+      +'<div class="plan-price"><b>'+WON(p.price)+'</b><span>/ 月</span>'
+        +'<span class="plan-orig">'+WON(p.orig)+'</span></div>'
+    +'</div>'
+    +(opts.rows?('<div style="margin-top:10px">'
+        +'<div class="ref-kv"><span class="k">通话时长</span><span class="v sm">'+p.call+'</span></div>'
+        +'<div class="ref-kv"><span class="k">短信数量</span><span class="v sm">'+p.sms+'</span></div>'
+        +'<div class="ref-kv"><span class="k">高速流量</span><span class="v sm">'+p.data+'</span></div>'
+        +'<div class="ref-kv"><span class="k">无限流量</span><span class="v sm">'+p.unl+'</span></div>'
+        +'<div class="ref-kv"><span class="k">附加通话</span><span class="v sm">'+p.addcall+'</span></div>'
+      +'</div>'):'')
+    +'<div class="plan-ft"><span class="kv">'+p.data+' · '+p.call+' · 返现 '+WON(p.cash)+'/月</span>'
+      +'<span class="go">'+(p.online?'查看详情':'需到店')+'<i data-i="chevron-right"></i></span></div>'
+    +'</div>';
+}
+function planById(id){ for(var i=0;i<PLANS.length;i++) if(PLANS[i].id===id) return PLANS[i]; return PLANS[0]; }
+
+/* ---------- 渲染：费用试算（ref-calc） ---------- */
+function calcFor(p){
+  /* 首月实付按各套餐自身活动计算（不再统一按 14% 估算） */
+  var off=p.off||0;
+  var first=off?Math.round(p.price*(1-off/100)):p.price;
+  return '<div class="ref-calc">'
+    +'<div class="cr"><span>月付金额</span><b>'+WON(p.price)+'</b></div>'
+    +'<div class="cr"><span>首月优惠</span><b>'+p.promo+'</b></div>'
+    +'<div class="cr"><span>双方返现</span><b>各 '+WON(p.cash)+' / 月</b></div>'
+    +'<div class="fin"><span class="lb">首月预估实付</span><span class="v">'+WON(first)+'</span></div>'
+    +'</div>';
+}
+
+/* ---------- 渲染：变体 A / B ---------- */
+function renderA(){
+  var p=planById(S.planId);
+  document.getElementById('a-code-top').textContent=S.code;
+  document.getElementById('code-a').textContent=S.code;
+  document.getElementById('a-plan').innerHTML=planCard(p,{rows:true});
+  document.getElementById('a-calc').innerHTML=calcFor(p);
+  document.getElementById('a-bnf').innerHTML=bnfList();
+  document.getElementById('a-notice').innerHTML=inviteNotice();
+  injectIcons(document.getElementById('p-a'));
+}
+function renderB(){
+  document.getElementById('b-code-top').textContent=S.code;
+  document.getElementById('code-b').textContent=S.code;
+  document.getElementById('b-plans').innerHTML=paramList(2).map(function(k){
+    var pd=planById(PARAM_DATA.data[k].pid), main=(k===2);
+    return pkCard(pd, main?'已匹配':(k<2?'更省':'更多'), main);
+  }).join('<div style="height:12px"></div>');
+  document.getElementById('b-bnf').innerHTML=bnfList();
+  document.getElementById('b-notice').innerHTML=inviteNotice();
+  injectIcons(document.getElementById('p-b'));
+}
+/* ================= 选择套餐（与 App 同一套模式：数据流量 / 月费 + 5 档进度 + 每档 3 款） ================= */
+var PARAM_DATA={
+  data:[{v:'15',pid:'p4'},{v:'30',pid:'p1'},{v:'60',pid:'p2'},{v:'80',pid:'p7'},{v:'100',pid:'p3'}],
+  fee:[{v:'₩33,000',pid:'p1'},{v:'₩44,000',pid:'p7'},{v:'₩55,000',pid:'p2'},{v:'₩88,000',pid:'p3'},{v:'₩99,000',pid:'p5'}]
+};
+var planMode='data', paramIdx=2;
+/* 推荐卡：主推（已匹配）+ 相邻档位（更省 / 更多） */
+function pkCard(p,side,main){
+  var dis=p.online?'':' disabled';
+  return '<div class="plan'+dis+'" onclick="'+(p.online?('openPD(\''+p.id+'\')'):'toast(\'该套餐需到店办理，请在 App 内预约门店\')')+'">'
+    +'<div class="plan-hd">'
+      +'<div style="min-width:0">'
+        +'<div class="plan-name">'+p.name+'<span class="pk-side'+(main?' on':'')+'">'+side+'</span></div>'
+        +'<div class="plan-sub">'+p.net+' · '+p.carrier+' · '+p.term+'</div>'
+      +'</div>'
+      +'<div class="plan-price"><b>'+WON(p.price)+'</b><span>/ 月</span><span class="plan-orig">'+WON(p.orig)+'</span></div>'
+    +'</div>'
+    +'<div class="plan-ft"><span class="kv">'+p.data+' · '+p.call+' · 返现 '+WON(p.cash)+'/月</span>'
+      +'<span class="go">'+(p.online?'查看详情':'需到店')+'<i data-i="chevron-right"></i></span></div>'
+    +'</div>';
+}
+function paramList(i){ return i===0?[0,1,2]:(i===4?[2,3,4]:[i-1,i,i+1]); }
+function tickLeft(i){ return 'calc(15px + (100% - 30px) * '+(i/4)+')'; }
+function setPlanMode(m){
+  planMode=m; paramIdx=2;
+  var a=document.getElementById('pk-m-data'), b=document.getElementById('pk-m-fee');
+  if(a) a.classList.toggle('on',m==='data');
+  if(b) b.classList.toggle('on',m==='fee');
+  renderParam();
+}
+function onParamSlide(val){
+  var k=Math.round(val);
+  if(k!==paramIdx){ paramIdx=k; renderParam(); }
+}
+function renderParam(){
+  var arr=PARAM_DATA[planMode], d=arr[paramIdx], isData=(planMode==='data');
+  var nEl=document.getElementById('pk-num'), uEl=document.getElementById('pk-unit');
+  if(nEl) nEl.textContent=isData?d.v:d.v.replace('₩','').replace(',000','K');
+  if(uEl) uEl.textContent=isData?'GB / 月':'/ 月';
+  var rg=document.getElementById('pk-range'), bub=document.getElementById('pk-bub');
+  var pct=paramIdx*25;
+  if(rg){ rg.value=paramIdx; rg.style.setProperty('--pct',pct+'%'); }
+  if(bub){ bub.textContent=isData?(d.v+'GB'):d.v; bub.style.left=tickLeft(paramIdx); }
+  var sc=document.getElementById('pk-scales');
+  if(sc) sc.innerHTML=arr.map(function(x,i){
+    return '<span class="'+(i===paramIdx?'on':'')+'">'+(isData?x.v:x.v.replace('₩','').replace(',000','K'))+'</span>';
+  }).join('');
+  for(var i=0;i<5;i++){
+    var t=document.getElementById('pkt'+i);
+    if(t){ t.style.left=tickLeft(i); t.classList.toggle('on',i===paramIdx); }
+  }
+  var box=document.getElementById('pk-cards'); if(!box) return;
+  box.innerHTML=paramList(paramIdx).map(function(k){
+    var pd=planById(arr[k].pid), main=(k===paramIdx);
+    return pkCard(pd, main?'已匹配':(k<paramIdx?'更省':'更多'), main);
+  }).join('<div style="height:12px"></div>');
+  injectIcons(box);
+}
+
+/* ---------- 渲染：套餐详情 ---------- */
+/* 点击任意套餐卡 → 直接拉出底部抽屉（不跳全屏） */
+function openPD(id){ if(id) S.planId=id; renderDetail();
+  document.getElementById('pd-mask').classList.add('show');
+  document.getElementById('pd-sheet').classList.add('show');
+  document.body.classList.add('pd-open');
+}
+function closePD(){
+  document.getElementById('pd-mask').classList.remove('show');
+  document.getElementById('pd-sheet').classList.remove('show');
+  document.body.classList.remove('pd-open');
+}
+function applyFromPD(){
+  var p=planById(S.planId);
+  if(!p.online){ toast('该套餐需到店办理，请在 App 内预约门店'); return; }
+  closePD(); go('p-s1');
+}
+function renderDetail(){
+  var p=planById(S.planId);
+  document.getElementById('dt-name').textContent=p.name;
+  document.getElementById('dt-sub').textContent=p.net+' · '+p.carrier+' · '+p.term;
+  document.getElementById('dt-tag').innerHTML=(p.tag?('<span class="tag '+(p.tag==='需到店'?'tag-warn':'tag-solid')+'">'+p.tag+'</span>'):'')
+    +(p.online?'<span class="tag">支持线上办理</span>':'<span class="tag tag-warn">需到店办理</span>');
+  document.getElementById('dt-price').textContent=WON(p.price);
+  document.getElementById('dt-orig').textContent='原价 '+WON(p.orig);
+  /* 参数宫格：与 App 套餐详情完全一致的 6 格 */
+  document.getElementById('dt-spec').innerHTML=[
+    ['流量',p.data],['通话',p.call],['短信',p.sms],
+    ['网络',p.net],['无限流量',p.unl],['附加通话',p.addcall]
+  ].map(function(c){ return '<div class="pd-cell"><span class="k">'+c[0]+'</span><b class="v">'+c[1]+'</b></div>'; }).join('');
+  /* 返现专区 */
+  document.getElementById('dt-cash-amt').textContent=WON(p.cash);
+  document.getElementById('dt-cash-time').textContent='≈ 1 个月话费 · 次月每周五发放';
+  document.getElementById('dt-cash-cond').textContent='领取条件：再次办理后付套餐即可申请 · 每订单仅限 1 次';
+  /* 有效期与合约 */
+  document.getElementById('dt-validity').textContent=(p.validity||'30天');
+  document.getElementById('dt-term2').textContent=p.term;
+  document.getElementById('dt-bw').textContent=(p.bw?'可共享宽带优惠（融合套餐）':'不可共享');
+  /* 办理方式 */
+  document.getElementById('dt-way').textContent=(p.online?'线上办理 · 网页端可直接提交':'到店办理 · 需在 App 内预约门店');
+  /* 使用说明：与上方参数卡互补（生效 / 结转 / 计费），不再复述通话、短信、流量数字 */
+  document.getElementById('dt-feats').innerHTML=(p.use||'').split('；').filter(function(t){return t.trim();}).map(function(t){
+    return '<div class="bnf"><i data-i="check"></i><span>'+t.trim()+'</span></div>';
+  }).join('');
+  /* 注意事项：与 App 同构（逐条普通条目 + 警示图标），不再折叠 */
+  document.getElementById('dt-notice').innerHTML=(p.notice||'').split('；').filter(function(t){return t.trim();}).map(function(t){
+    return '<div class="bnf"><i data-i="alert" style="color:var(--g500)"></i><span>'+t.trim()+'</span></div>';
+  }).join('')
+    + (p.online?'':'<div class="bnf"><i data-i="alert" style="color:var(--g500)"></i><span>该套餐需到店实名核验或上门安装，请在 App 内预约门店后办理</span></div>');
+  var ab=document.getElementById('dt-apply');
+  if(ab){ ab.textContent=p.online?('立即办理 · '+p.name):'该套餐需到店办理'; ab.disabled=!p.online; }
+  injectIcons(document.getElementById('pd-sheet'));
+}
+function stepPlan(dir){
+  var i=0; for(var k=0;k<PLANS.length;k++) if(PLANS[k].id===S.planId) i=k;
+  var n=(i+dir+PLANS.length)%PLANS.length; S.planId=PLANS[n].id;
+  renderDetail();
+  var body=document.querySelector('.pd-body'); if(body) body.scrollTop=0;   /* 切套餐后回到抽屉顶部 */
+}
+
+/* ---------- 渲染：STEP 1 ---------- */
+function pickWay(el,v){ S.way=v; el.parentNode.querySelectorAll('.opt').forEach(function(b){b.classList.remove('on');}); el.classList.add('on'); }
+function pickType(el,v){
+  S.type=v;
+  el.parentNode.querySelectorAll('.opt').forEach(function(b){b.classList.remove('on');}); el.classList.add('on');
+  document.getElementById('s3-tail-sec').style.display = (v==='new')?'block':'none';
+  document.getElementById('s3-move-sec').style.display = (v==='move')?'block':'none';
+  document.getElementById('s3-tel-hint').textContent = (v==='move')
+    ? '不能填写要转移的那个号码，请填其他可联系到你的号码'
+    : '用于开通通知与配送联系';
+  renderStep1();
+}
+function pickId(el,v){ S.idType=v; el.parentNode.querySelectorAll('.opt').forEach(function(b){b.classList.remove('on');}); el.classList.add('on'); renderStep1(); renderStep4(); }
+function renderStep1(){
+  document.getElementById('s1-id-note').textContent = S.idType==='arc'?'网页端仅支持以下两类':'银行信息可跳过';
+  document.getElementById('s1-notice').innerHTML=''
+    +'<div class="nt"><i data-i="info" style="width:14px;height:14px"></i>网页端办理限制</div>'
+    +'<div class="ni open"><div class="nq" onclick="toggleNi(this)"><span>仅支持线上办理</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">网页端不提供 eSIM 开通与到店办理；如需 eSIM 或到店服务，请在 App 内完成。</div></div>'
+    +'<div class="ni"><div class="nq" onclick="toggleNi(this)"><span>护照认证的账户要求</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">登陆证认证需填写银行卡 / 存折信息（必填）；护照认证可跳过账户信息，但需在 90 天内补齐。</div></div>';
+  injectIcons(document.getElementById('p-s1'));
+}
+
+/* ---------- 渲染：STEP 2（验证码 + 绑定邀请） ---------- */
+function sendCode(){
+  var ph=(document.getElementById('s2-phone').value||'').trim();
+  if(ph.length<9){ toast('请输入正确的手机号'); return; }
+  var b=document.getElementById('s2-send'), n=60;
+  b.textContent='60s 后重发';
+  var t=setInterval(function(){ n--; b.textContent=n+'s 后重发';
+    if(n<=0){ clearInterval(t); b.textContent='获取验证码'; } },1000);
+  toast('验证码已发送：123456');
+}
+function bindInvite(){
+  S.bound=true;
+  document.getElementById('s2-bind-state').textContent='已绑定';
+  document.getElementById('s2-bind-text').textContent='已成功绑定邀请关系';
+  toast('已绑定邀请人 '+S.inviteName+'（24 小时内仅可绑定一次）');
+  renderBar();
+}
+function renderStep2(){
+  document.getElementById('s2-code-show').textContent=S.code;
+  document.getElementById('s2-notice').innerHTML=''
+    +'<div class="nt"><i data-i="info" style="width:14px;height:14px"></i>邀请关系说明</div>'
+    +'<div class="ni open"><div class="nq" onclick="toggleNi(this)"><span>一人仅绑定一个邀请人</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">验证码验证通过后自动绑定本链接的邀请人；超过 24 小时不可补绑。</div></div>'
+    +'<div class="ni"><div class="nq" onclick="toggleNi(this)"><span>有效邀请与返现</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">你完成首单后视为有效邀请，你与邀请人各得 1 个月话费返现资格；用满合约期后邀请人还可领取额外返现。</div></div>';
+  injectIcons(document.getElementById('p-s2'));
+}
+
+/* ---------- 渲染：STEP 3 ---------- */
+function tailInput(el){
+  el.value=(el.value||'').replace(/\D/g,'').slice(0,4);
+}
+function renderStep3(){
+  document.getElementById('s3-move-no').textContent = (document.getElementById('s2-phone').value||'010-0000-0000');
+  injectIcons(document.getElementById('p-s3'));
+}
+
+/* ---------- 渲染：STEP 4 ---------- */
+function setBank(m){
+  S.bank=m;
+  document.getElementById('bank-seg-card').classList.toggle('on',m==='card');
+  document.getElementById('bank-seg-book').classList.toggle('on',m==='book');
+  document.getElementById('f-exp').style.display=(m==='card')?'block':'none';
+  document.getElementById('s4-cardno').placeholder=(m==='card')?'请输入银行卡号':'请输入存折账号';
+  renderStep4();
+}
+function onFile(kind,input){
+  var f=input.files&&input.files[0];
+  var box=document.getElementById('up-'+(kind==='front'?'front':'back'));
+  var t=document.getElementById('up-'+(kind==='front'?'front-t':'back-t'));
+  S.files[kind]=true;
+  box.classList.add('done');
+  t.textContent='已上传：'+((f&&f.name)||'证件照片');
+  toast('证件已上传');
+  renderBar();
+}
+function renderStep4(){
+  var isPass=(S.idType==='pass');
+  document.getElementById('s4-id-type').textContent=isPass?'护照':'外国人登陆证';
+  document.getElementById('up-front-t').textContent=isPass?'上传护照信息页':'上传登陆证正面';
+  document.getElementById('up-back-t').textContent=isPass?'上传护照签证页':'上传登陆证反面';
+  document.getElementById('s4-lead').textContent=isPass
+    ? '上传护照照片；账户信息可跳过，但需在 90 天内补齐。'
+    : '上传外国人登陆证照片，并填写用于月费代扣的银行卡信息（必填）。';
+  document.getElementById('s4-notice').innerHTML=''
+    +'<div class="nt"><i data-i="info" style="width:14px;height:14px"></i>账户信息要求</div>'
+    +'<div class="ni open"><div class="nq" onclick="toggleNi(this)"><span>银行卡 / 借记卡</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">需填写卡号、有效期与银行名称；存折账号只需填写账号与银行名称。</div></div>'
+    +'<div class="ni"><div class="nq" onclick="toggleNi(this)"><span>'+(isPass?'护照认证可跳过':'登陆证认证为必填')+'</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">'+(isPass
+        ?'选择护照认证时可跳过账户信息，但需在 90 天内补齐，否则影响月费代扣与返现发放。'
+        :'选择外国人登陆证认证时，账户信息为必填项，缺失将无法提交申请。')+'</div></div>';
+  injectIcons(document.getElementById('p-s4'));
+}
+
+/* ---------- 渲染：STEP 5（摘要 / 协议 / 签名） ---------- */
+function toggleAgree(){ S.agree=!S.agree; document.getElementById('s5-agree').classList.toggle('on',S.agree); renderBar(); }
+function renderStep5(){
+  var p=planById(S.planId);
+  document.getElementById('s5-sum').innerHTML=''
+    +'<div class="ref-kv"><span class="k">套餐</span><span class="v">'+p.name+' · '+WON(p.price)+' / 月</span></div>'
+    +'<div class="ref-kv"><span class="k">办理方式</span><span class="v sm">线上办理 · '+(S.type==='new'?'新开号码':'号码转移')+'</span></div>'
+    +'<div class="ref-kv"><span class="k">合约期 / 停机</span><span class="v sm">'+p.term+' · 合约期内可自助停机</span></div>'
+    +'<div class="ref-kv"><span class="k">邀请关系</span><span class="v sm">'+(S.bound?'已绑定 '+S.inviteName:'待绑定')+' · '+S.code+'</span></div>';
+  document.getElementById('s5-calc').innerHTML=calcFor(p);
+  document.getElementById('s5-agreements').innerHTML=[
+    '服务协议 · 后付套餐办理条款',
+    '实名认证授权书 · 证件信息使用',
+    '电子签名同意书 · 裂变活动规则'
+  ].map(function(t){ return '<div class="bnf"><i data-i="shield"></i><span>'+t+'</span></div>'; }).join('');
+  injectIcons(document.getElementById('p-s5'));
+}
+function clearSign(){
+  var c=document.getElementById('sign-canvas'); if(!c) return;
+  var ctx=c.getContext('2d'); ctx&&ctx.clearRect(0,0,c.width,c.height);
+  S.signed=false;
+  document.getElementById('sign-state').textContent='待签名';
+  document.getElementById('sign-ph').style.display='flex';
+  renderBar();
+}
+function initSign(){
+  var c=document.getElementById('sign-canvas'); if(!c||c.getAttribute('data-init')) return;
+  c.setAttribute('data-init','1');
+  var dpr=window.devicePixelRatio||1, r=c.getBoundingClientRect();
+  c.width=(r.width||320)*dpr; c.height=(r.height||160)*dpr;
+  var ctx=c.getContext('2d'); if(!ctx) return;
+  ctx.scale(dpr,dpr); ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#111';
+  var drawing=false;
+  function pos(e){ var b=c.getBoundingClientRect(); return {x:e.clientX-b.left,y:e.clientY-b.top}; }
+  function down(e){ drawing=true; var pt=pos(e); ctx.beginPath(); ctx.moveTo(pt.x,pt.y); if(e.pointerId&&c.setPointerCapture) c.setPointerCapture(e.pointerId); }
+  function move(e){ if(!drawing) return; var pt=pos(e); ctx.lineTo(pt.x,pt.y); ctx.stroke();
+    if(!S.signed){ S.signed=true; document.getElementById('sign-state').textContent='已签名';
+      document.getElementById('sign-ph').style.display='none'; renderBar(); } }
+  function up(){ drawing=false; }
+  c.addEventListener('pointerdown',down); c.addEventListener('pointermove',move);
+  c.addEventListener('pointerup',up); c.addEventListener('pointercancel',up); c.addEventListener('pointerleave',up);
+}
+
+/* ---------- 渲染：提交成功 ---------- */
+function applyNo(){ return 'W'+(new Date()).toISOString().slice(0,10).replace(/-/g,'')+'-'+(100+Math.floor(Math.random()*899)); }
+/* 直接进入「办理已受理」时也保证卡片有内容（评审 / 回访场景） */
+function ensureDone(){
+  var sum=document.getElementById('done-sum');
+  if(sum && sum.innerHTML) return;
+  document.getElementById('done-lead').textContent = MACHINE
+    ? '资料已提交，审核通过后将为您开通号码，结果以短信通知。'
+    : '资料已提交。当前为非工作时间（21:00–09:00），将于次日 09:00 起处理开通。';
+  fillDone(planById(S.planId||'p3'), applyNo());
+}
+function fillDone(p, no){
+  document.getElementById('done-no').textContent='单号 '+no;
+  document.getElementById('done-sum').innerHTML=''
+    +'<div class="ref-kv"><span class="k">套餐内容</span><span class="v">'+p.name+' · '+p.data+' · '+p.call+'</span></div>'
+    +'<div class="ref-kv"><span class="k">月付金额</span><span class="v">'+WON(p.price)+' / 月</span></div>'
+    +'<div class="ref-kv"><span class="k">合约期 / 停机</span><span class="v sm">'+p.term+' · 合约期内可自助停机</span></div>'
+    +'<div class="ref-kv"><span class="k">返现（双方）</span><span class="v">各 '+WON(p.cash)+' / 月</span></div>'
+    +'<div class="ref-kv"><span class="k">邀请关系</span><span class="v sm">'+(S.bound?'已绑定 '+S.inviteName:'待绑定')+' · '+S.code+'</span></div>'
+    +'<div class="ref-kv"><span class="k">办理方式</span><span class="v sm">线上办理 · '+(S.type==='new'?'新开号码':'号码转移')+'</span></div>';
+  document.getElementById('done-calc').innerHTML=calcFor(p);
+  document.getElementById('done-info').innerHTML=''
+    +'<div class="bnf"><i data-i="zap"></i><span><b>套餐：</b>'+p.name+'（'+p.data+' / '+p.call+'），'+WON(p.price)+' / 月，'+p.term+'。</span></div>'
+    +'<div class="bnf"><i data-i="gift"></i><span><b>返利：</b>你与邀请人各得 '+WON(p.cash)+' 返现资格（相当于 1 个月话费），按周发放。</span></div>'
+    +'<div class="bnf"><i data-i="clock"></i><span><b>合约与停机：</b>'+p.term+'，合约期内可在 App 内自助停机，停机天数不计入合约。'+
+      (p.term.indexOf('12')>=0?'提前解约需支付违约金。':'')+'</span></div>'
+    +'<div class="bnf"><i data-i="sprout"></i><span><b>裂变活动：</b>好友通过你的二维码办理并完成首单，双方各得 1 个月话费返现，资格可累计。</span></div>';
+  document.getElementById('done-next').innerHTML=''
+    +'<div class="ref-kv"><span class="k">继续在网页办理</span><span class="v sm">可再提交一笔申请</span></div>'
+    +'<div class="ref-kv"><span class="k">安装 App</span><span class="v sm">查进度 · 领返现 · 管理套餐</span></div>';
+  document.getElementById('done-code').textContent=S.code;
+  injectIcons(document.getElementById('p-done'));
+}
+function submitApply(){
+  if(!S.agree){ toast('请先阅读并同意相关协议'); return; }
+  if(!S.signed){ toast('请先手写签名'); return; }
+  document.getElementById('done-lead').textContent = MACHINE
+    ? '资料已提交，审核通过后将为您开通号码，结果以短信通知。'
+    : '资料已提交。当前为非工作时间（21:00–09:00），将于次日 09:00 起处理开通。';
+  fillDone(planById(S.planId), applyNo());
+  show('p-done');
+  STACK.length=0;
+  toast('申请已提交');
+}
+function shareInvite(){
+  var url=location.origin+location.pathname+'?code='+encodeURIComponent(S.code)+'&plan='+S.planId;
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).catch(function(){}); }
+  toast('邀请链接已复制：'+url);
+}
+function openApp(){
+  toast('正在尝试打开蜂巢 App…');
+  try{ location.href='beehive://open?code='+S.code+'&plan='+S.planId; }catch(e){}
+  setTimeout(function(){ show('p-dl'); toast('未检测到 App，请下载后重试'); }, 1500);
+}
+
+/* ---------- 渲染：下载页 FAQ ---------- */
+function renderDl(){
+  document.getElementById('dl-code').textContent=S.code;
+  document.getElementById('dl-notice').innerHTML=''
+    +'<div class="nt"><i data-i="info" style="width:14px;height:14px"></i>重要提示 · 常见问题</div>'
+    +'<div class="ni open"><div class="nq" onclick="toggleNi(this)"><span>必须下载 App 才能办理吗？</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">不需要。网页端可完成线上后付套餐申请；eSIM、到店办理与家庭 / 宽带类套餐需在 App 内完成。</div></div>'
+    +'<div class="ni"><div class="nq" onclick="toggleNi(this)"><span>邀请码会被带过去吗？</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">会。点击「打开 App」时邀请码、套餐与订单号会自动带回 App；若已安装则由 App 接管后续流程。</div></div>'
+    +'<div class="ni"><div class="nq" onclick="toggleNi(this)"><span>可以用手机浏览器办理吗？</span><i data-i="chevron-right"></i></div>'
+      +'<div class="na">可以，页面适配 320–430px 宽度，支持 iOS Safari 与 Android Chrome。</div></div>';
+  injectIcons(document.getElementById('p-dl'));
+}
+
+/* ---------- 底部操作栏 ---------- */
+function renderBar(){
+  var el=document.getElementById('bbar'), html='';
+  if(cur==='p-a'){
+    var p=planById(S.planId);
+    html='<button class="btn btn-pri" onclick="applyFlow()"><i data-i="zap"></i>立即申请 · 无需下载</button>'
+      +'<button class="btn btn-line sec" onclick="go(\'p-pick\')">换个套餐</button>';
+  }else if(cur==='p-b'){
+    html='<button class="btn btn-pri" onclick="go(\'p-pick\')">选择套餐并办理</button>';
+  }else if(cur==='p-pick'){
+    html='<button class="btn btn-pri" onclick="applyFlow()">立即办理</button>';
+  }else if(cur==='p-s1'){
+    html='<button class="btn btn-pri" onclick="nextStep()">下一步 · 验证手机号</button>';
+  }else if(cur==='p-s2'){
+    html='<button class="btn btn-line sec" onclick="back()">上一步</button>'
+      +'<button class="btn btn-pri" onclick="nextStep()">'+(S.bound?'下一步':'验证并绑定邀请关系')+'</button>';
+  }else if(cur==='p-s3'){
+    html='<button class="btn btn-line sec" onclick="back()">上一步</button>'
+      +'<button class="btn btn-pri" onclick="nextStep()">下一步 · 上传证件</button>';
+  }else if(cur==='p-s4'){
+    html='<button class="btn btn-line sec" onclick="back()">上一步</button>'
+      +(S.idType==='pass'
+        ? '<button class="btn btn-pri" onclick="skipAccount()">跳过账户并继续</button>'
+        : '<button class="btn btn-pri" onclick="nextStep()">下一步 · 协议签名</button>');
+  }else if(cur==='p-s5'){
+    html='<button class="btn btn-line sec" onclick="back()">上一步</button>'
+      +'<button class="btn btn-pri" onclick="submitApply()">提交申请</button>';
+  }else if(cur==='p-done'){
+    html='<button class="btn btn-line sec" onclick="go(\'p-a\')">返回邀请页</button>'
+      +'<button class="btn btn-pri" onclick="go(\'p-dl\')"><i data-i="download"></i>下载 App 领返现</button>';
+  }else if(cur==='p-dl'){
+    html='<button class="btn btn-pri" onclick="openApp()"><i data-i="zap"></i>打开蜂巢 App</button>';
+  }
+  el.innerHTML=html;
+  injectIcons(el);
+}
+
+/* ---------- 流程推进 ---------- */
+function applyFlow(){ go('p-s1'); }
+function nextStep(){
+  if(cur==='p-s1'){ go('p-s2'); renderStep2(); return; }
+  if(cur==='p-s2'){
+    var ph=(document.getElementById('s2-phone').value||'').trim();
+    var cd=(document.getElementById('s2-code').value||'').trim();
+    if(ph.length<9){ toast('请输入正确的手机号'); return; }
+    if(cd.length<4){ toast('请输入验证码'); return; }
+    if(!S.bound) bindInvite();
+    go('p-s3'); renderStep3(); return;
+  }
+  if(cur==='p-s3'){
+    var nm=(document.getElementById('s3-name').value||'').trim();
+    var tel=(document.getElementById('s3-tel').value||'').trim();
+    var ad=(document.getElementById('s3-addr').value||'').trim();
+    if(!nm){ toast('请输入姓名'); return; }
+    if(tel.length<9){ toast('请输入联系电话'); return; }
+    if(!ad){ toast('请输入收货地址'); return; }
+    if(S.type==='move'){
+      var mv=document.getElementById('s2-phone').value;
+      if(tel===mv){ toast('联系电话不能是要转移的号码'); return; }
+    }
+    go('p-s4'); renderStep4(); return;
+  }
+  if(cur==='p-s4'){
+    if(!S.files.front){ toast('请上传证件正面 / 信息页'); return; }
+    if(!S.files.back){ toast('请上传证件反面'); return; }
+    var no=(document.getElementById('s4-cardno').value||'').trim();
+    var bk=(document.getElementById('s4-bank').value||'').trim();
+    if(S.idType==='arc' && (!no||!bk)){ toast('登陆证认证需填写完整账户信息'); return; }
+    if(!no && !bk){ toast('账户信息可跳过，请点击「跳过并继续」确认'); }
+    go('p-s5'); renderStep5(); initSign(); return;
+  }
+}
+function skipAccount(){
+  if(S.idType!=='pass'){ toast('登陆证认证的账户信息为必填项'); return; }
+  S.files.front=true; S.files.back=true;
+  go('p-s5'); renderStep5(); initSign();
+  toast('已跳过账户信息 · 请在 90 天内补齐');
+}
+
+/* 连点品牌 logo 3 次，显示/隐藏屏幕切换条 */
+var _tapN=0,_tapT=null;
+function tapBrand(){
+  _tapN++; clearTimeout(_tapT);
+  _tapT=setTimeout(function(){ _tapN=0; },600);
+  if(_tapN>=3){ _tapN=0; var dv=document.getElementById('dev'); if(dv){ dv.classList.toggle('show'); toast(dv.classList.contains('show')?'已显示屏幕切换条（评审用）':'已隐藏屏幕切换条'); } }
+}
+
+/* 二维码图形（与 App 内一致的示例码） */
+function qrSvg(){
+  var n=29, seed=20260930, rects='', i, j;
+  function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; }
+  function finder(x,y){
+    rects+='<rect x="'+x+'" y="'+y+'" width="7" height="7"/>'
+      +'<rect x="'+(x+1)+'" y="'+(y+1)+'" width="5" height="5" fill="#fff"/>'
+      +'<rect x="'+(x+2)+'" y="'+(y+2)+'" width="3" height="3"/>';
+  }
+  for(i=0;i<n;i++) for(j=0;j<n;j++){
+    if((i<8&&j<8)||(i<8&&j>n-9)||(i>n-9&&j<8)) continue;
+    if(i===7||j===7){ if((i+j)%2===0) rects+='<rect x="'+j+'" y="'+i+'" width="1" height="1"/>'; continue; }
+    if(rnd()>0.52) rects+='<rect x="'+j+'" y="'+i+'" width="1" height="1"/>';
+  }
+  finder(0,0); finder(n-7,0); finder(0,n-7);
+  return '<svg viewBox="0 0 '+n+' '+n+'" shape-rendering="crispEdges">'+rects+'</svg>';
+}
+function renderQrs(){
+  var a=document.getElementById('done-qr'); if(a) a.innerHTML=qrSvg();
+  var b=document.getElementById('dl-qr');   if(b) b.innerHTML=qrSvg();
+}
+
+/* ---------- 工具 ---------- */
+function copyCode(id){
+  var t=(document.getElementById(id)||{}).textContent||'';
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).catch(function(){}); }
+  toast('邀请码已复制：'+t);
+}
+var TT;
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg; el.style.display='block';
+  clearTimeout(TT); TT=setTimeout(function(){ el.style.display='none'; },1800);
+}
+
+/* ---------- 进入页面时的重绘钩子（每个页面进入即按当前状态渲染） ---------- */
+var ONENTER={
+  'p-a':renderA, 'p-b':renderB, 'p-pick':renderParam,
+  'p-s1':renderStep1, 'p-s2':renderStep2, 'p-s3':renderStep3,
+  'p-s4':renderStep4, 'p-s5':function(){ renderStep5(); initSign(); },
+  'p-done':ensureDone, 'p-dl':renderDl
+};
+
+/* ---------- 启动：解析链接参数 ---------- */
+function boot(){
+  var q={};
+  try{
+    var s=(location.search||'').replace(/^\?/,'');
+    s.split('&').forEach(function(kv){
+      if(!kv) return; var a=kv.split('=');
+      q[decodeURIComponent(a[0])]=decodeURIComponent(a[1]||'');
+    });
+  }catch(e){}
+  if(q.code) S.code=q.code;
+  if(q.order) S.orderId=q.order;
+  if(q.plan){ S.planId=q.plan; S.variant='a'; }
+  else if(q.v==='b'){ S.variant='b'; }
+  else if(!q.plan && q.v!=='a'){ S.variant='b'; }
+  if(q.plan) S.variant='a';
+
+  /* ?dev=1 显示屏幕切换条；?p=<pageId> 直达某屏 */
+  if(q.dev==='1'){ var dv=document.getElementById('dev'); if(dv) dv.classList.add('show'); }
+  var start=q.p&&PAGES.indexOf(q.p)>=0?q.p:(S.variant==='a'?'p-a':'p-b');
+
+  renderA(); renderB(); renderParam();
+  renderStep1(); renderStep2(); renderStep3(); renderStep4(); renderStep5(); renderDl();
+  injectIcons(document);
+  renderQrs();
+  show(start);
+  if(q.p==='p-detail'){ setTimeout(function(){ openPD(); }, 60); }   /* 兼容旧链接：直接拉出详情抽屉 */
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+</script>
+</body>
+</html>
